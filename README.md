@@ -1,8 +1,8 @@
 HTML5 Genetic Cars
 ==================
 
-A genetic algorithm car evolver in HTML5 canvas.
+A fork of the code behind http://rednuht.org/genetic_cars_2/
 
-This is inspired by BoxCar2D, and uses the same physics engine, Box2D, but it's written from scratch.
+Changes:
 
-This is the code as published on http://rednuht.org/genetic_cars_2/
+* A heatmap of death locations is displayed below the minimap
