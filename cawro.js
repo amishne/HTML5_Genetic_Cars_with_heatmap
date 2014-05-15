@@ -31,6 +31,9 @@ var minimapscale = 3;
 var minimapfogdistance = 0;
 var fogdistance = document.getElementById("minimapfog").style;
 
+var heatmapcanvas = document.getElementById("heatmap");
+var heatmapctx = heatmapcanvas.getContext("2d");
+
 var generationSize = 20;
 var cw_carArray = new Array();
 var cw_carGeneration = new Array();
@@ -771,9 +774,21 @@ function cw_drawMiniMap() {
   minimapctx.stroke();
 }
 
+function cw_drawDeathOnHeatMap(position) {
+  heatmapctx.globalAlpha = 0.05;
+  heatmapctx.strokeStyle = "#f00";
+  heatmapctx.beginPath();
+  heatmapctx.moveTo(position, 0);
+  heatmapctx.lineTo(position, minimapcanvas.height);
+  heatmapctx.stroke();
+}
+
+function cw_clearHeatMap() {
+  heatmapcanvas.width = heatmapcanvas.width;
+}
+
 /* ==== END Drawing ======================================================== */
 /* ========================================================================= */
-
 
 function simulationStep() {
   world.Step(1/box2dfps, 20, 20);
@@ -785,13 +800,15 @@ function simulationStep() {
     ghost_add_replay_frame(cw_carArray[k].replay, cw_carArray[k]);
     cw_carArray[k].frames++;
     position = cw_carArray[k].getPosition();
-    cw_carArray[k].minimapmarker.style.left = Math.round((position.x+5) * minimapscale) + "px";
+    map_position = Math.round((position.x+5) * minimapscale);
+    cw_carArray[k].minimapmarker.style.left = map_position + "px";
     cw_carArray[k].healthBar.width = Math.round((cw_carArray[k].health/max_car_health)*100) + "%";
     if(cw_carArray[k].checkDeath()) {
       cw_carArray[k].kill();
       cw_deadCars++;
       document.getElementById("population").innerHTML = "cars alive: " + (generationSize-cw_deadCars);
       cw_carArray[k].minimapmarker.style.borderLeft = "1px solid #ccc";
+      cw_drawDeathOnHeatMap(map_position);
       if(cw_deadCars >= generationSize) {
         cw_newRound();
       }
@@ -899,6 +916,7 @@ function cw_resetWorld() {
   Math.seedrandom(floorseed);
   cw_createFloor();
   cw_drawMiniMap();
+  cw_clearHeatMap();
   Math.seedrandom();
   cw_resetPopulation();
   cw_startSimulation();

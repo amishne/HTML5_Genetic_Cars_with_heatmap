@@ -60,6 +60,14 @@
         height: 200px;
         overflow: hidden;
       }
+        
+      #heatmapholder {
+        position: relative;
+        border: 1px solid black;
+        width: 800px;
+        height: 20px;
+        overflow: hidden;
+      }
 
       .minimapmarker {
         position: absolute;
@@ -154,6 +162,9 @@
       <div id="minimapfog"></div>
       <canvas id="minimap" width="800" height="200"></canvas>
       <div id="minimapcamera"></div>
+    </div>
+    <div id="heatmapholder">
+      <canvas id="heatmap" width="800" height="20"></canvas>
     </div>
     <div id="topscoreholder">
     <input type="button" value="View top replay" onclick="cw_toggleGhostReplay(this)" /><br />
